@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard | MediKiosk</title>
+    <style>
+        body { margin: 0; background: #f3f7fa; font-family: Arial, sans-serif; color: #243447; }
+        .navbar { background: #102d42; color: white; padding: 18px 6%; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; text-decoration: none; }
+        .container { width: 88%; max-width: 1200px; margin: 30px auto; }
+        .welcome { background: linear-gradient(120deg, #087f8c, #345b85); color: white; padding: 30px; border-radius: 16px; }
+        .welcome h1 { margin-top: 0; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 25px 0; }
+        .stat, .panel { background: white; padding: 22px; border-radius: 14px; box-shadow: 0 4px 15px #1b344010; }
+        .stat p { color: #64748b; margin-bottom: 8px; }
+        .stat h2 { margin: 0; color: #087f8c; font-size: 30px; }
+        .panel h2 { margin-top: 0; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 650px; }
+        th, td { text-align: left; padding: 14px 10px; border-bottom: 1px solid #e7edf2; }
+        th { color: #526579; font-size: 13px; }
+        .status { background: #fff2d8; color: #946200; padding: 6px 10px; border-radius: 20px; font-size: 12px; }
+        .alert { background: #ffe5e5; color: #b42318; padding: 6px 10px; border-radius: 20px; font-size: 12px; }
+        .normal { background: #e1f5e9; color: #18794e; padding: 6px 10px; border-radius: 20px; font-size: 12px; }
+        .empty { text-align: center; padding: 35px; color: #718096; }
+        .case-link { color: #087f8c; text-decoration: none; font-weight: bold; }
+        .case-link:hover { text-decoration: underline; }
+        footer { text-align: center; color: #8795a1; padding: 25px; }
+        @media(max-width: 700px) { .stats { grid-template-columns: 1fr; } .container { width: 92%; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <strong>MediKiosk</strong>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+
+    <main class="container">
+        <section class="welcome">
+            <h1>Welcome, Dr. {{ name }}!</h1>
+            <p>{{ system }} Dashboard</p>
+            <p>Review patient assessments and monitor cases from one place.</p>
+        </section>
+
+        <section class="stats">
+            <div class="stat">
+                <p>Total Patient Cases</p>
+                <h2>{{ total_cases }}</h2>
+            </div>
+            <div class="stat">
+                <p>Pending Reviews</p>
+                <h2>{{ pending_cases }}</h2>
+            </div>
+            <div class="stat">
+                <p>Red Flag Alerts</p>
+                <h2>{{ red_flag_cases }}</h2>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Patient Cases</h2>
+
+            {% if cases %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Age</th>
+                            <th>Symptoms</th>
+                            <th>Duration</th>
+                            <th>Severity</th>
+                            <th>Alert</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for case in cases %}
+                        <tr>
+                            <td>
+                                <a class="case-link"
+                                   href="{{ url_for('doctor_case_details', case_id=case.id) }}">
+                                    {{ case.patient_name }}
+                                </a>
+                            </td>
+                            <td>{{ case.patient_age }}</td>
+                            <td>{{ case.symptoms }}</td>
+                            <td>{{ case.duration }}</td>
+                            <td>{{ case.severity }}</td>
+                            <td>
+                                {% if case.red_flag_level == 'Needs Review' %}
+                                    <span class="alert">Needs Review</span>
+                                {% else %}
+                                    <span class="normal">Normal</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="status">{{ case.status }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty">
+                <h3>No patient cases yet</h3>
+                <p>Patient assessments will appear here after submission.</p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>© 2026 MediKiosk | AI-Powered Patient Case-Taking Software</footer>
+
+</body>
+</html>

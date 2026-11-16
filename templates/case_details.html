@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Case Details | MediKiosk</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f7fa;font-family:Arial,sans-serif;color:#243447}
+nav{background:#102d42;color:white;padding:18px 6%;display:flex;justify-content:space-between}
+nav a{color:white;text-decoration:none}
+.container{width:88%;max-width:1000px;margin:30px auto}
+.heading{background:linear-gradient(120deg,#087f8c,#345b85);color:white;padding:25px;border-radius:15px}
+.panel{background:white;padding:24px;margin-top:20px;border-radius:14px;box-shadow:0 4px 15px #1b344010}
+.details{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.item{padding:12px;background:#f5f8fa;border-radius:9px}
+.item small{display:block;color:#718096;margin-bottom:7px}
+.item strong{overflow-wrap:anywhere}
+.alert{background:#fff0ed;border-left:5px solid #d94841;padding:16px;border-radius:8px;color:#9f2d27}
+.normal{background:#e8f7ee;border-left:5px solid #24945c;padding:16px;border-radius:8px;color:#176b43}
+.answer{padding:14px 0;border-bottom:1px solid #e7edf2}
+.answer strong{display:block;margin-bottom:6px}
+textarea,select{width:100%;padding:13px;border:1px solid #ccd8df;border-radius:8px;font:inherit;margin-top:8px;margin-bottom:18px}
+textarea{min-height:120px;resize:vertical}
+label{font-weight:bold;font-size:14px}
+button{background:#087f8c;color:white;border:0;padding:13px 22px;border-radius:8px;font-weight:bold;cursor:pointer}
+button:hover{background:#066b74}
+.back{display:inline-block;margin-top:20px;background:#345b85;color:white;padding:12px 20px;border-radius:8px;text-decoration:none}
+.report-item{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px;background:#f5f8fa;border:1px solid #e5edf0;border-radius:9px;margin-top:12px}
+.report-name{font-weight:bold;overflow-wrap:anywhere}
+.report-link{background:#087f8c;color:white;text-decoration:none;padding:9px 14px;border-radius:7px;font-size:13px;white-space:nowrap}
+.empty{background:#f5f8fa;padding:18px;border-radius:9px;color:#718096}
+@media(max-width:650px){
+.details{grid-template-columns:1fr}
+.container{width:92%}
+.report-item{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <strong>MediKiosk</strong>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</nav>
+
+<main class="container">
+
+<section class="heading">
+    <h1>Patient Case #{{ case.id }}</h1>
+    <p>Review the patient's submitted assessment</p>
+</section>
+
+<section class="panel">
+    <h2>Patient Information</h2>
+    <div class="details">
+        <div class="item"><small>Name</small><strong>{{ case.patient_name }}</strong></div>
+        <div class="item"><small>Age</small><strong>{{ case.patient_age }}</strong></div>
+        <div class="item"><small>Gender</small><strong>{{ case.patient_gender }}</strong></div>
+        <div class="item"><small>Medical System</small><strong>{{ case.system }}</strong></div>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Assessment Summary</h2>
+    <div class="details">
+        <div class="item"><small>Main Symptom</small><strong>{{ case.symptoms }}</strong></div>
+        <div class="item"><small>Duration</small><strong>{{ case.duration }}</strong></div>
+        <div class="item"><small>Severity</small><strong>{{ case.severity }}</strong></div>
+        <div class="item"><small>Submitted On</small><strong>{{ case.created_at }}</strong></div>
+    </div>
+</section>
+
+<section class="panel">
+    <h2>Red Flag Assessment</h2>
+
+    {% if case.red_flag_level == "Needs Review" %}
+    <div class="alert">
+        <strong>Needs Review</strong>
+        <p>{{ case.red_flag_details }}</p>
+    </div>
+    {% else %}
+    <div class="normal">
+        <strong>No predefined red flags detected</strong>
+        <p>{{ case.red_flag_details }}</p>
+    </div>
+    {% endif %}
+
+    <p><small>This is a rule-based prototype alert, not a medical diagnosis.</small></p>
+</section>
+
+<section class="panel">
+    <h2>Interview Responses</h2>
+
+    {% if responses %}
+        {% for response in responses %}
+        <div class="answer">
+            <strong>{{ response.question_key.replace('_', ' ').title() }}</strong>
+            <span>{{ response.answer }}</span>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No additional interview responses are available.</p>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>📁 Patient Medical Reports</h2>
+    <p style="color:#718096;margin:10px 0 18px">
+        Reports uploaded by the patient for this assessment.
+    </p>
+
+    {% if reports %}
+        {% for report in reports %}
+        <div class="report-item">
+            <div>
+                <div class="report-name">📄 {{ report.file_name }}</div>
+                <small style="color:#829198">Uploaded: {{ report.uploaded_at }}</small>
+            </div>
+
+            <a class="report-link"
+               href="{{ url_for('view_report', report_id=report.id) }}"
+               target="_blank">
+                View Report ↗
+            </a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty">
+            No medical reports have been uploaded for this assessment yet.
+        </div>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <h2>Doctor's Review</h2>
+    <p style="color:#718096;margin:10px 0 20px">
+        Add your review notes and update the assessment status.
+    </p>
+
+    <form method="POST">
+        <label for="status">Case Status</label>
+        <select name="status" id="status" required>
+            <option value="Pending" {% if case.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Under Review" {% if case.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+            <option value="Reviewed" {% if case.status == 'Reviewed' %}selected{% endif %}>Reviewed</option>
+        </select>
+
+        <label for="doctor_notes">Clinical Review Notes</label>
+        <textarea
+            name="doctor_notes"
+            id="doctor_notes"
+            placeholder="Write your review notes here..."
+        >{{ case.doctor_notes or '' }}</textarea>
+
+        <button type="submit">Save Review</button>
+    </form>
+
+    <p style="font-size:12px;color:#829198;margin-top:15px">
+        Notes are for the prototype's doctor-review workflow and should not be treated as an automated diagnosis.
+    </p>
+</section>
+
+<a class="back" href="{{ url_for('doctor_dashboard') }}">← Back to Dashboard</a>
+
+</main>
+</body>
+</html>

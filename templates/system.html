@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ system }} | MediKiosk</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f3f8f7;
+            color: #183b40;
+        }
+
+        .navbar {
+            height: 75px;
+            padding: 0 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 25px;
+            font-weight: 700;
+            color: #126b68;
+        }
+
+        .logo span {
+            color: #263f49;
+        }
+
+        .nav-tag {
+            color: #668080;
+            font-size: 13px;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #103e48, #137c77);
+            padding: 65px 20px 105px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 8px 17px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 30px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #d5f3ed;
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            color: #d4e9e7;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: -55px auto 0;
+            padding: 0 22px 65px;
+            position: relative;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 25px;
+            color: #183f47;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: #718487;
+            font-size: 14px;
+        }
+
+        .role-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .role-card {
+            background: white;
+            border-radius: 18px;
+            padding: 35px 30px;
+            box-shadow: 0 12px 35px rgba(24, 65, 70, 0.09);
+            border: 1px solid #e7efed;
+            transition: 0.3s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 18px 40px rgba(24, 65, 70, 0.14);
+        }
+
+        .icon-box {
+            width: 58px;
+            height: 58px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            margin-bottom: 22px;
+        }
+
+        .patient-icon {
+            background: #e2f4ee;
+        }
+
+        .doctor-icon {
+            background: #e5eff8;
+        }
+
+        .role-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 23px;
+            color: #183f47;
+            margin-bottom: 10px;
+        }
+
+        .role-card p {
+            color: #718184;
+            font-size: 14px;
+            line-height: 1.7;
+            min-height: 48px;
+            margin-bottom: 24px;
+        }
+
+        .role-btn {
+            display: block;
+            text-align: center;
+            padding: 13px;
+            border-radius: 9px;
+            background: #147c76;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .role-btn:hover {
+            background: #105f5b;
+        }
+
+        .doctor-btn {
+            background: #254f69;
+        }
+
+        .doctor-btn:hover {
+            background: #193b51;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 35px;
+            color: #147c76;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 22px;
+            background: white;
+            color: #829294;
+            font-size: 12px;
+            border-top: 1px solid #e8efed;
+        }
+
+        @media (max-width: 650px) {
+            .role-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 55px 20px 90px;
+            }
+
+            .nav-tag {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Medi<span>Kiosk</span></div>
+        <div class="nav-tag">AI-Powered Patient Case-Taking Software</div>
+    </nav>
+
+    <section class="hero">
+        <div class="eyebrow">Your Healthcare Journey Starts Here</div>
+        <h1>{{ system }}</h1>
+        <p>
+            A smarter way to connect patients and doctors.<br>
+            Choose your role to continue.
+        </p>
+    </section>
+
+    <main class="content">
+
+        <div class="section-heading">
+            <h2>How would you like to continue?</h2>
+            <p>Select the portal that matches your role.</p>
+        </div>
+
+        <div class="role-cards">
+
+            <div class="role-card">
+                <div class="icon-box patient-icon">🩺</div>
+                <h3>I'm a Patient</h3>
+                <p>
+                    Share your health concerns through a guided assessment
+                    and connect with a doctor for review.
+                </p>
+
+                <a href="{{ url_for('register', system='modern' if system == 'Modern Medicine' else 'ayurveda', role='patient') }}"
+                   class="role-btn">
+                    Continue as Patient →
+                </a>
+            </div>
+
+            <div class="role-card">
+                <div class="icon-box doctor-icon">👨‍⚕️</div>
+                <h3>I'm a Doctor</h3>
+                <p>
+                    Access patient case details, review clinical summaries
+                    and manage submitted cases.
+                </p>
+
+                <a href="{{ url_for('register', system='modern' if system == 'Modern Medicine' else 'ayurveda', role='doctor') }}"
+                   class="role-btn doctor-btn">
+                    Continue as Doctor →
+                </a>
+            </div>
+
+        </div>
+
+        <a href="/" class="back-link">← Back to Home</a>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 MediKiosk | Your Health, Our Priority
+    </footer>
+
+</body>
+</html>

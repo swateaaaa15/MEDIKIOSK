@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Interview | MediKiosk</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f7fa;
+            color: #243447;
+        }
+
+        nav {
+            background: #102d46;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 { font-size: 23px; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .heading h1 {
+            color: #123b55;
+            margin-bottom: 10px;
+        }
+
+        .heading p { color: #718096; }
+
+        .card {
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 8px 28px rgba(20, 50, 70, 0.08);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            height: 8px;
+            background: #e5edf1;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 20%;
+            background: #16a085;
+            transition: width 0.3s;
+        }
+
+        .question-number {
+            color: #159b83;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        h2#question {
+            font-size: 23px;
+            line-height: 1.4;
+            margin-bottom: 22px;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            border: 1px solid #dce6eb;
+            border-radius: 11px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option:hover {
+            border-color: #16a085;
+            background: #f0faf7;
+        }
+
+        .option.selected {
+            border: 2px solid #16a085;
+            background: #eaf8f4;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 28px;
+            gap: 12px;
+        }
+
+        button {
+            padding: 13px 25px;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        #nextBtn {
+            background: #159b83;
+            color: white;
+            margin-left: auto;
+        }
+
+        #backBtn {
+            background: #edf2f5;
+            color: #34495e;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .note {
+            text-align: center;
+            margin-top: 22px;
+            color: #82909c;
+            font-size: 13px;
+        }
+
+        .message {
+            margin-top: 18px;
+            color: #b42318;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .alert-box {
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .alert-warning {
+            background: #fff1f0;
+            border: 1px solid #f3b5b0;
+            color: #a32620;
+        }
+
+        .alert-normal {
+            background: #eaf8f1;
+            border: 1px solid #a8dfc2;
+            color: #176b45;
+        }
+
+        .alert-box h3 {
+            margin-bottom: 8px;
+        }
+
+        @media(max-width: 600px) {
+            .card { padding: 22px; }
+            h2#question { font-size: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <h2>MediKiosk</h2>
+    <a href="/patient/dashboard">Back to Dashboard</a>
+</nav>
+
+<div class="container">
+
+    <div class="heading">
+        <h1>Patient Interview</h1>
+        <p>Let's understand your health concerns step by step.</p>
+    </div>
+
+    <div class="card">
+
+        <div class="progress-info">
+            <span id="stepText">Question 1</span>
+            <span id="progressText">20%</span>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="question-number" id="questionLabel">
+            ABOUT YOUR HEALTH
+        </div>
+
+        <h2 id="question">What is your main health concern?</h2>
+
+        <div class="options" id="answerArea"></div>
+
+        <div class="buttons">
+            <button id="backBtn" onclick="previousQuestion()" disabled>
+                Back
+            </button>
+
+            <button id="nextBtn" onclick="nextQuestion()" disabled>
+                Next
+            </button>
+        </div>
+
+        <p class="message" id="message"></p>
+
+    </div>
+
+    <p class="note">
+        Your answers help create a structured summary for doctor review.
+        This interview does not provide a diagnosis.
+    </p>
+
+</div>
+
+<script>
+    const questions = [
+        {
+            id: "symptom",
+            label: "MAIN CONCERN",
+            text: "What is your main health concern?",
+            type: "options",
+            options: [
+                "Headache",
+                "Fever",
+                "Cough or cold",
+                "Stomach pain",
+                "Body pain",
+                "Other"
+            ]
+        },
+        {
+            id: "duration",
+            label: "DURATION",
+            text: "How long have you been experiencing this problem?",
+            type: "options",
+            options: [
+                "Since today",
+                "1–3 days",
+                "4–7 days",
+                "More than a week",
+                "More than a month"
+            ]
+        },
+        {
+            id: "severity",
+            label: "SEVERITY",
+            text: "How severe is your problem?",
+            type: "options",
+            options: [
+                "Mild",
+                "Moderate",
+                "Severe"
+            ]
+        }
+    ];
+
+    const extraQuestions = {
+        "Headache": {
+            id: "associated",
+            label: "RELATED SYMPTOMS",
+            text: "Are you experiencing any of these along with headache?",
+            type: "options",
+            options: [
+                "Vomiting",
+                "Blurred vision",
+                "Dizziness",
+                "Fever",
+                "None of these"
+            ]
+        },
+        "Fever": {
+            id: "temperature",
+            label: "FEVER DETAILS",
+            text: "Have you measured your body temperature?",
+            type: "options",
+            options: [
+                "Below 100°F",
+                "100–102°F",
+                "Above 102°F",
+                "Not measured"
+            ]
+        },
+        "Cough or cold": {
+            id: "cough_type",
+            label: "COUGH DETAILS",
+            text: "Which type of cough are you experiencing?",
+            type: "options",
+            options: [
+                "Dry cough",
+                "Cough with mucus",
+                "Both",
+                "No cough, only cold"
+            ]
+        },
+        "Stomach pain": {
+            id: "stomach_details",
+            label: "PAIN DETAILS",
+            text: "Where do you feel the stomach pain?",
+            type: "options",
+            options: [
+                "Upper abdomen",
+                "Lower abdomen",
+                "Around the navel",
+                "Entire abdomen"
+            ]
+        }
+    };
+
+    let answers = {};
+    let questionList = [...questions];
+    let currentIndex = 0;
+
+    function showQuestion() {
+        const current = questionList[currentIndex];
+
+        document.getElementById("questionLabel").textContent = current.label;
+        document.getElementById("question").textContent = current.text;
+
+        const answerArea = document.getElementById("answerArea");
+        answerArea.innerHTML = "";
+
+        current.options.forEach(option => {
+            const div = document.createElement("div");
+            div.className = "option";
+            div.textContent = option;
+
+            if (answers[current.id] === option) {
+                div.classList.add("selected");
+            }
+
+            div.onclick = () => {
+                answers[current.id] = option;
+
+                document.querySelectorAll(".option").forEach(item => {
+                    item.classList.remove("selected");
+                });
+
+                div.classList.add("selected");
+                document.getElementById("nextBtn").disabled = false;
+            };
+
+            answerArea.appendChild(div);
+        });
+
+        document.getElementById("stepText").textContent =
+            `Question ${currentIndex + 1}`;
+
+        const progress = Math.round(
+            ((currentIndex + 1) / questionList.length) * 100
+        );
+
+        document.getElementById("progressText").textContent = progress + "%";
+        document.getElementById("progressBar").style.width = progress + "%";
+
+        document.getElementById("backBtn").disabled = currentIndex === 0;
+
+        document.getElementById("nextBtn").textContent =
+            currentIndex === questionList.length - 1 ? "Finish" : "Next";
+
+        document.getElementById("nextBtn").disabled =
+            !answers[current.id];
+
+        document.getElementById("message").textContent = "";
+    }
+
+    function nextQuestion() {
+        const current = questionList[currentIndex];
+
+        if (!answers[current.id]) {
+            return;
+        }
+
+        if (current.id === "symptom") {
+            const extra = extraQuestions[answers.symptom];
+
+            questionList = questions.slice(0, 3);
+
+            if (extra) {
+                questionList.push(extra);
+            }
+        }
+
+        if (currentIndex < questionList.length - 1) {
+            currentIndex++;
+            showQuestion();
+        } else {
+            saveInterview();
+        }
+    }
+
+    function previousQuestion() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            showQuestion();
+        }
+    }
+
+    async function saveInterview() {
+        const nextButton = document.getElementById("nextBtn");
+        const message = document.getElementById("message");
+
+        nextButton.disabled = true;
+        nextButton.textContent = "Saving...";
+
+        try {
+            const response = await fetch("/patient/interview/save", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    answers: answers
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Unable to save assessment.");
+            }
+
+            showResult(result);
+
+        } catch (error) {
+            message.textContent = error.message;
+            nextButton.disabled = false;
+            nextButton.textContent = "Try Again";
+        }
+    }
+
+    function showResult(result) {
+        const card = document.querySelector(".card");
+        card.innerHTML = "";
+
+        const heading = document.createElement("h2");
+        heading.textContent = "Interview Completed!";
+        heading.style.color = "#159b83";
+        heading.style.marginBottom = "15px";
+
+        const description = document.createElement("p");
+        description.textContent =
+            "Your assessment has been saved successfully.";
+
+        const details = document.createElement("div");
+        details.style.background = "#f0faf7";
+        details.style.padding = "18px";
+        details.style.borderRadius = "10px";
+        details.style.marginTop = "20px";
+
+        const title = document.createElement("h3");
+        title.textContent = "Your Answers";
+        title.style.marginBottom = "12px";
+        details.appendChild(title);
+
+        Object.entries(answers).forEach(([key, value]) => {
+            const paragraph = document.createElement("p");
+            paragraph.style.margin = "8px 0";
+            paragraph.textContent = key + ": " + value;
+            details.appendChild(paragraph);
+        });
+
+        // Red Flag Alert Display
+        const alertBox = document.createElement("div");
+        alertBox.className = "alert-box";
+
+        const alertHeading = document.createElement("h3");
+        const alertDetails = document.createElement("p");
+
+        if (result.red_flag_level === "Needs Review") {
+            alertBox.classList.add("alert-warning");
+            alertHeading.textContent = "⚠️ Red Flag Alert - Needs Review";
+        } else {
+            alertBox.classList.add("alert-normal");
+            alertHeading.textContent = "✓ No Predefined Red Flags Detected";
+        }
+
+        alertDetails.textContent = result.red_flag_details ||
+            "No alert details available.";
+
+        alertBox.appendChild(alertHeading);
+        alertBox.appendChild(alertDetails);
+
+        const disclaimer = document.createElement("p");
+        disclaimer.textContent =
+            "This is an automated prototype alert, not a medical diagnosis. " +
+            "A doctor should review the patient's condition.";
+
+        disclaimer.style.fontSize = "13px";
+        disclaimer.style.color = "#718096";
+        disclaimer.style.marginTop = "12px";
+
+        const caseInfo = document.createElement("p");
+        caseInfo.textContent = "Assessment ID: " + result.case_id;
+        caseInfo.style.marginTop = "18px";
+        caseInfo.style.fontWeight = "bold";
+
+        const dashboardLink = document.createElement("a");
+        dashboardLink.href = "/patient/dashboard";
+        dashboardLink.textContent = "Back to Dashboard";
+        dashboardLink.style.display = "inline-block";
+        dashboardLink.style.marginTop = "20px";
+        dashboardLink.style.padding = "12px 18px";
+        dashboardLink.style.background = "#159b83";
+        dashboardLink.style.color = "white";
+        dashboardLink.style.textDecoration = "none";
+        dashboardLink.style.borderRadius = "8px";
+
+        card.appendChild(heading);
+        card.appendChild(description);
+        card.appendChild(alertBox);
+        card.appendChild(details);
+        card.appendChild(disclaimer);
+        card.appendChild(caseInfo);
+        card.appendChild(dashboardLink);
+    }
+
+    showQuestion();
+</script>
+
+</body>
+</html>

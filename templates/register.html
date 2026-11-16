@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ role|title }} Registration | MediKiosk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .register-page {
+            min-height: 100vh;
+            padding: 45px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #e8f5f3, #f4f7fb);
+        }
+
+        .register-card {
+            width: 100%;
+            max-width: 540px;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(20, 60, 70, 0.12);
+        }
+
+        .register-card h1 {
+            text-align: center;
+            color: #123b46;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #71818a;
+            margin-bottom: 25px;
+        }
+
+        .register-card label {
+            display: block;
+            margin: 14px 0 7px;
+            color: #29434b;
+            font-weight: 600;
+        }
+
+        .register-card input,
+        .register-card select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d5e1e3;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+            background: white;
+        }
+
+        .register-card input:focus,
+        .register-card select:focus {
+            outline: none;
+            border-color: #168c83;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .register-btn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #087f78;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background: #066b65;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .error {
+            background: #fff0ef;
+            color: #b42318;
+        }
+
+        .success {
+            background: #e9f8ef;
+            color: #18713b;
+        }
+
+        .register-links {
+            text-align: center;
+            margin-top: 22px;
+            color: #65777e;
+            font-size: 14px;
+        }
+
+        .register-links a {
+            color: #087f78;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        @media(max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .register-card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="register-page">
+    <div class="register-card">
+
+        <h1>Create Account</h1>
+        <p class="subtitle">{{ system }} · {{ role|title }} Registration</p>
+
+        {% if error %}
+            <div class="message error">{{ error }}</div>
+        {% endif %}
+
+        {% if success %}
+            <div class="message success">{{ success }}</div>
+        {% endif %}
+
+        <form method="POST">
+
+            <label>Full Name</label>
+            <input type="text" name="name"
+                   placeholder="Enter your full name" required>
+
+            <div class="form-row">
+                <div>
+                    <label>Age</label>
+                    <input type="number" name="age"
+                           min="1" max="120" placeholder="Your age" required>
+                </div>
+
+                <div>
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Email Address</label>
+            <input type="email" name="email"
+                   placeholder="Enter your email" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" name="mobile"
+                   maxlength="10" placeholder="10-digit mobile number" required>
+
+            {% if role == "doctor" %}
+
+                <label>Specialization</label>
+                <select name="specialization" required>
+                    <option value="">Select specialization</option>
+                    <option value="General Physician">General Physician</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Dermatologist">Dermatologist</option>
+                    <option value="Neurologist">Neurologist</option>
+                    <option value="Orthopedic">Orthopedic</option>
+                    <option value="Pediatrician">Pediatrician</option>
+                    <option value="Gynecologist">Gynecologist</option>
+                    <option value="Ayurveda Physician">Ayurveda Physician</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label>Qualification</label>
+                <input type="text" name="qualification"
+                       placeholder="e.g. MBBS, MD, BAMS" required>
+
+                <label>Hospital / Clinic</label>
+                <input type="text" name="hospital"
+                       placeholder="Hospital or clinic name">
+
+            {% endif %}
+
+            <label>Password</label>
+            <input type="password" name="password"
+                   placeholder="Minimum 6 characters"
+                   minlength="6" required>
+
+            <button type="submit" class="register-btn">
+                Create Account
+            </button>
+
+        </form>
+
+        <div class="register-links">
+            Already have an account?
+            <a href="{{ url_for('login',
+                system='modern' if system == 'Modern Medicine' else 'ayurveda',
+                role=role) }}">Login here</a>
+            <br><br>
+            <a href="{{ url_for('home') }}">Back to Home</a>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

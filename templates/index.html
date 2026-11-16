@@ -1,0 +1,670 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediKiosk | Your Health, Our Priority</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: #203747;
+            background: #ffffff;
+        }
+
+        /* NAVBAR */
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            background: white;
+            border-bottom: 1px solid #edf1f2;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 800;
+            color: #087f83;
+        }
+
+        .logo span {
+            color: #203747;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #526773;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #087f83;
+        }
+
+        .nav-btn {
+            background: #087f83;
+            color: white !important;
+            padding: 11px 20px;
+            border-radius: 6px;
+        }
+
+        /* HERO SECTION */
+
+        .hero {
+            padding: 65px 8%;
+            background: #f0f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 45px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 520px;
+        }
+
+        .tag {
+            color: #087f83;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 49px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #203747;
+        }
+
+        .hero h1 span {
+            color: #087f83;
+        }
+
+        .hero p {
+            font-size: 15px;
+            line-height: 1.9;
+            color: #637680;
+            margin-bottom: 28px;
+        }
+
+        .main-btn {
+            display: inline-block;
+            background: #087f83;
+            color: white;
+            padding: 13px 23px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .main-btn:hover {
+            background: #06676b;
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 355px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        /* INTRO STRIP */
+
+        .intro-strip {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 55px;
+            padding: 23px 15px;
+            background: #087f83;
+            color: white;
+            flex-wrap: wrap;
+        }
+
+        .intro-item {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* COMMON SECTION */
+
+        .section {
+            padding: 65px 8%;
+            text-align: center;
+        }
+
+        .section-label {
+            color: #087f83;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        .section h2 {
+            font-size: 30px;
+            color: #203747;
+            margin-bottom: 12px;
+        }
+
+        .section-description {
+            font-size: 14px;
+            color: #788992;
+            margin-bottom: 35px;
+            line-height: 1.7;
+        }
+
+        /* HEALTHCARE CARDS */
+
+        .system-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            text-align: left;
+        }
+
+        .system-card {
+            background: white;
+            border: 1px solid #e8eeee;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.25s;
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(25, 60, 70, 0.10);
+        }
+
+        .system-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .card-content h3 {
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            color: #71818a;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .card-link {
+            display: inline-block;
+            background: #087f83;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .ayurveda .card-link {
+            background: #628c4c;
+        }
+
+        /* FEATURES */
+
+        .features-section {
+            background: #f6f9fa;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            text-align: left;
+        }
+
+        .feature {
+            background: white;
+            padding: 25px;
+            border: 1px solid #edf0f1;
+            border-radius: 10px;
+        }
+
+        .feature-icon {
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            font-size: 13px;
+            color: #74848d;
+            line-height: 1.8;
+        }
+
+        /* ABOUT */
+
+        .about {
+            display: flex;
+            align-items: center;
+            gap: 45px;
+            text-align: left;
+        }
+
+        .about img {
+            width: 43%;
+            height: 270px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content h2 {
+            font-size: 29px;
+            margin: 12px 0;
+        }
+
+        .about-content p {
+            font-size: 14px;
+            color: #71818a;
+            line-height: 1.9;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #203747;
+            color: white;
+            padding: 40px 8% 20px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+        .footer-content h3 {
+            margin-bottom: 12px;
+            font-size: 17px;
+        }
+
+        .footer-content p,
+        .footer-content a {
+            color: #c4d0d5;
+            font-size: 13px;
+            line-height: 2;
+            text-decoration: none;
+        }
+
+        .copyright {
+            border-top: 1px solid #435967;
+            margin-top: 30px;
+            padding-top: 18px;
+            text-align: center;
+            color: #bdcbd0;
+            font-size: 12px;
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 768px) {
+            header {
+                padding: 17px 5%;
+            }
+
+            nav {
+                gap: 12px;
+            }
+
+            nav a:not(.nav-btn) {
+                display: none;
+            }
+
+            .hero {
+                flex-direction: column;
+                padding: 45px 6%;
+            }
+
+            .hero h1 {
+                font-size: 39px;
+            }
+
+            .hero-image img {
+                height: 250px;
+            }
+
+            .system-cards,
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .about {
+                flex-direction: column;
+            }
+
+            .about img {
+                width: 100%;
+            }
+
+            .section {
+                padding: 50px 6%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header>
+    <div class="logo">Medi<span>Kiosk.</span></div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="#systems">Healthcare Systems</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#systems" class="nav-btn">Get Started</a>
+    </nav>
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="tag">YOUR HEALTHCARE COMPANION</div>
+
+        <h1>
+            Your Health,<br>
+            Our <span>Priority.</span>
+        </h1>
+
+        <p>
+            AI-Powered Patient Case-Taking Software.
+            A smarter way to connect patients and doctors
+            through structured health information and
+            guided patient assessment.
+        </p>
+
+        <a href="#systems" class="main-btn">
+            Explore Healthcare →
+        </a>
+
+    </div>
+
+    <div class="hero-image">
+        <img
+        src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=1000"
+        alt="Doctor in a professional healthcare setting">
+    </div>
+
+</section>
+
+
+<!-- INTRO STRIP -->
+
+<div class="intro-strip">
+    <div class="intro-item">✚ Patient First</div>
+    <div class="intro-item">▣ Guided Assessment</div>
+    <div class="intro-item">⚕ Doctor Review</div>
+    <div class="intro-item">▤ Structured Summary</div>
+</div>
+
+
+<!-- HEALTHCARE SYSTEMS -->
+
+<section class="section" id="systems">
+
+    <div class="section-label">CHOOSE YOUR HEALTHCARE PATH</div>
+
+    <h2>Healthcare, Your Way</h2>
+
+    <p class="section-description">
+        Select your preferred healthcare system to get started.
+    </p>
+
+    <div class="system-cards">
+
+        <div class="system-card">
+
+            <img
+            src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=900"
+            alt="Modern medical healthcare">
+
+            <div class="card-content">
+
+                <h3>⚕ Modern Medicine</h3>
+
+                <p>
+                    Explore conventional healthcare through
+                    a guided patient assessment and structured
+                    clinical information.
+                </p>
+
+                <a href="/modern" class="card-link">
+                    Explore Modern Medicine →
+                </a>
+
+            </div>
+        </div>
+
+
+        <div class="system-card ayurveda">
+
+            <img
+            src="https://images.unsplash.com/photo-1545389336-cf090694435e?w=900"
+            alt="Ayurveda natural wellness">
+
+            <div class="card-content">
+
+                <h3>🌿 Ayurveda</h3>
+
+                <p>
+                    Choose the traditional Ayurveda pathway
+                    for a dedicated patient case-taking
+                    experience.
+                </p>
+
+                <a href="/ayurveda" class="card-link">
+                    Explore Ayurveda →
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="section features-section" id="features">
+
+    <div class="section-label">OUR PLATFORM</div>
+
+    <h2>What Makes MediKiosk Different?</h2>
+
+    <p class="section-description">
+        A structured approach to patient information and doctor review.
+    </p>
+
+    <div class="features">
+
+        <div class="feature">
+            <div class="feature-icon">📝</div>
+            <h3>Guided Patient Interview</h3>
+            <p>
+                Collect patient responses through
+                a step-by-step assessment process.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🚨</div>
+            <h3>Safety Flag Detection</h3>
+            <p>
+                Highlight selected warning symptoms
+                for doctor attention.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">📋</div>
+            <h3>Clinical Summary</h3>
+            <p>
+                Organize patient-provided information
+                into a readable clinical summary.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">👨‍⚕️</div>
+            <h3>Doctor Dashboard</h3>
+            <p>
+                Allow doctors to review patient cases
+                and update their status.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🔀</div>
+            <h3>SmartCare Routing</h3>
+            <p>
+                Support department assignment based
+                on selected symptoms and routing rules.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🔒</div>
+            <h3>Separate User Access</h3>
+            <p>
+                Separate patient and doctor access
+                for both healthcare systems.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section class="section" id="about">
+
+    <div class="about">
+
+        <img
+        src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=900"
+        alt="Healthcare professional and medical equipment">
+
+        <div class="about-content">
+
+            <div class="section-label">ABOUT MEDIKIOSK</div>
+
+            <h2>Making Patient Information More Organized</h2>
+
+            <p>
+                MediKiosk is designed to simplify the initial
+                patient case-taking process. It helps collect
+                health information, identify selected warning
+                symptoms and prepare a structured summary
+                for doctor review.
+
+                <br><br>
+
+                Our aim is to make the first step of a
+                healthcare consultation more organized
+                and accessible.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <div>
+            <h3>MediKiosk.</h3>
+            <p>AI-Powered Patient Case-Taking Software.</p>
+            <p>Your Health, Our Priority.</p>
+        </div>
+
+        <div>
+            <h3>Healthcare Systems</h3>
+            <p><a href="/modern">Modern Medicine</a></p>
+            <p><a href="/ayurveda">Ayurveda</a></p>
+        </div>
+
+        <div>
+            <h3>Quick Links</h3>
+            <p><a href="#features">Our Features</a></p>
+            <p><a href="#about">About Us</a></p>
+        </div>
+
+    </div>
+
+    <div class="copyright">
+        © 2026 MediKiosk. All Rights Reserved.
+        | Your Health, Our Priority.
+    </div>
+
+</footer>
+
+</body>
+</html>

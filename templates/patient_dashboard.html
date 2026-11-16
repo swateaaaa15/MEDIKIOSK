@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Dashboard | MediKiosk</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f7f8;color:#23414a}
+nav{background:#123b46;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;color:white}
+.logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:bold}
+.logo-icon{background:#ffffff20;padding:9px;border-radius:10px}
+.nav-right{display:flex;align-items:center;gap:18px}
+.nav-right a{color:white;text-decoration:none;font-size:14px}
+.logout{background:#087f78;padding:10px 17px;border-radius:8px}
+.container{max-width:1150px;margin:35px auto;padding:0 22px}
+.welcome{background:linear-gradient(120deg,#087f78,#123b46);color:white;padding:35px;border-radius:18px;margin-bottom:28px}
+.welcome small{color:#bce8df;letter-spacing:1.5px;font-weight:bold}
+.welcome h1{font-size:30px;margin:13px 0 9px}
+.welcome p{color:#d5e7e8;line-height:1.6}
+.system-tag{display:inline-block;background:#ffffff25;padding:8px 14px;border-radius:20px;margin-top:17px;font-size:13px}
+.section{background:white;padding:25px;border-radius:16px;margin-bottom:28px;box-shadow:0 5px 20px rgba(20,60,70,.05)}
+.section-heading{font-size:20px;color:#193e48;margin-bottom:7px}
+.section-subtitle{color:#829198;font-size:13px;margin-bottom:25px}
+.journey{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.step{flex:1;text-align:center;min-width:0}
+.step-circle{width:42px;height:42px;border-radius:50%;background:#e8eef0;color:#71818a;display:flex;align-items:center;justify-content:center;margin:auto;font-weight:bold}
+.step.completed .step-circle{background:#16865b;color:white;box-shadow:0 0 0 5px #e3f4ed}
+.step-title{margin-top:10px;font-size:12px;color:#71818a;font-weight:600}
+.step.completed .step-title{color:#16865b}
+.arrow{color:#aab8bc;font-size:20px;margin-top:10px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.card{padding:25px;border-radius:15px;min-height:175px;transition:transform .2s}
+.card:hover{transform:translateY(-4px)}
+.mint{background:#e0f2ed}.lavender{background:#eee9fa}
+.orange{background:#fff1de}.blue{background:#e6eff9}
+.card-icon{font-size:27px;margin-bottom:15px}
+.card h3{margin-bottom:9px;color:#193e48;font-size:18px}
+.card p{font-size:13px;line-height:1.6;color:#667c80;margin-bottom:17px}
+.card a{display:inline-block;text-decoration:none;color:white;background:#087f78;padding:10px 15px;border-radius:7px;font-size:13px;font-weight:bold}
+.lavender a{background:#7655b5}.orange a{background:#b47720}.blue a{background:#386a9b}
+.case-card{border:1px solid #e6edef;padding:19px;border-radius:12px;margin-bottom:15px}
+.case-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}
+.case-card h3{color:#193e48;font-size:17px}
+.case-info{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:15px}
+.case-info div{background:#f5f8f9;padding:12px;border-radius:8px}
+.case-info small{display:block;color:#829198;margin-bottom:6px}
+.case-info strong{font-size:13px}
+.status{padding:7px 12px;border-radius:20px;background:#fff1d5;color:#936300;font-size:12px;font-weight:bold}
+.reviewed{background:#e0f2e8;color:#18794e}
+.under-review{background:#e6eff9;color:#386a9b}
+.doctor-notes{background:#eef7f5;padding:14px;border-radius:9px;margin-top:12px;line-height:1.6;font-size:13px}
+.alert{background:#fff0ed;color:#a63b32;padding:12px;border-radius:9px;margin-top:12px;font-size:13px;line-height:1.5}
+.normal{background:#e8f7ee;color:#18794e;padding:12px;border-radius:9px;margin-top:12px;font-size:13px}
+.empty{text-align:center;padding:25px;color:#829198;line-height:1.7}
+.upload-box{background:#fff9ef;border:1px solid #f1dfc2;padding:16px;border-radius:10px;margin-top:15px}
+.upload-box h4{color:#805a20;margin-bottom:8px}
+.upload-box p{font-size:12px;color:#7d7770;margin-bottom:12px;line-height:1.5}
+.upload-box input{display:block;width:100%;font-size:13px;margin-bottom:12px}
+.upload-btn{background:#b47720;color:white;border:0;padding:10px 15px;border-radius:7px;font-weight:bold;cursor:pointer}
+
+/* SmartCare assigned doctor */
+.doctor-box{
+    background:#eaf6f3;
+    border:1px solid #cce8df;
+    padding:17px;
+    border-radius:11px;
+    margin-top:15px;
+}
+.doctor-box h4{
+    color:#176b5e;
+    margin-bottom:12px;
+    font-size:15px;
+}
+.doctor-details{
+    background:white;
+    padding:14px;
+    border-radius:9px;
+    line-height:1.8;
+    font-size:13px;
+}
+.doctor-details strong{
+    color:#193e48;
+    font-size:15px;
+}
+.doctor-details span{
+    display:block;
+    color:#667c80;
+}
+.unassigned{
+    background:#fff8e9;
+    border:1px solid #f0dfb9;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+    color:#805a20;
+    font-size:13px;
+    line-height:1.6;
+}
+.unassigned strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+footer{text-align:center;padding:25px;color:#89999e;font-size:12px}
+
+@media(max-width:650px){
+nav{padding:16px 20px}.nav-right{gap:10px}
+.nav-right a:first-child{display:none}
+.welcome{padding:25px}.welcome h1{font-size:24px}
+.section{padding:20px 12px}.journey{gap:3px}
+.step-circle{width:32px;height:32px;font-size:12px}
+.step-title{font-size:9px}.arrow{font-size:14px}
+.cards{grid-template-columns:1fr}
+.case-info{grid-template-columns:1fr 1fr}
+.case-top{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+<nav>
+    <div class="logo">
+        <span class="logo-icon">✚</span>
+        MediKiosk
+    </div>
+    <div class="nav-right">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('logout') }}" class="logout">Logout ↗</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<section class="welcome">
+    <small>PATIENT PORTAL</small>
+    <h1>Welcome back, {{ name }}!</h1>
+    <p>Your health journey, organised in one place.</p>
+    <span class="system-tag">{{ system }}</span>
+</section>
+
+<section class="section">
+    <h2 class="section-heading">Your Patient Journey</h2>
+    <p class="section-subtitle">Track each stage of your health assessment.</p>
+
+    <div class="journey">
+        <div class="step completed">
+            <div class="step-circle">✓</div>
+            <div class="step-title">Register</div>
+        </div>
+
+        <span class="arrow">➜</span>
+
+        <div class="step {% if cases %}completed{% endif %}">
+            <div class="step-circle">{% if cases %}✓{% else %}2{% endif %}</div>
+            <div class="step-title">Interview</div>
+        </div>
+
+        <span class="arrow">➜</span>
+
+        <div class="step {% if cases and cases[0].has_reports %}completed{% endif %}">
+            <div class="step-circle">{% if cases and cases[0].has_reports %}✓{% else %}3{% endif %}</div>
+            <div class="step-title">Reports</div>
+        </div>
+
+        <span class="arrow">➜</span>
+
+        <div class="step {% if cases %}completed{% endif %}">
+            <div class="step-circle">{% if cases %}✓{% else %}4{% endif %}</div>
+            <div class="step-title">Summary</div>
+        </div>
+
+        <span class="arrow">➜</span>
+
+        <div class="step {% if cases and cases|selectattr('status', 'equalto', 'Reviewed')|list %}completed{% endif %}">
+            <div class="step-circle">
+                {% if cases and cases|selectattr('status', 'equalto', 'Reviewed')|list %}
+                    ✓
+                {% else %}
+                    5
+                {% endif %}
+            </div>
+            <div class="step-title">Review</div>
+        </div>
+    </div>
+</section>
+
+<h2 class="section-heading" style="margin-bottom:18px">Your Health Dashboard</h2>
+
+<div class="cards">
+    <div class="card mint">
+        <div class="card-icon">🩺</div>
+        <h3>New Assessment</h3>
+        <p>Start your guided health interview and share your current health concerns.</p>
+        <a href="{{ url_for('patient_interview') }}">Start Assessment →</a>
+    </div>
+
+    <div class="card lavender">
+        <div class="card-icon">📋</div>
+        <h3>Previous Cases</h3>
+        <p>View your submitted health assessments and doctor's review.</p>
+        <a href="#previous-cases">View History →</a>
+    </div>
+
+    <div class="card orange">
+        <div class="card-icon">📁</div>
+        <h3>Upload Medical Reports</h3>
+        <p>Upload prescriptions, blood test reports, X-rays and other medical documents.</p>
+        <a href="#previous-cases">Choose Assessment →</a>
+    </div>
+
+    <div class="card blue">
+        <div class="card-icon">👤</div>
+        <h3>My Profile</h3>
+        <p>View your personal details and registered account information.</p>
+        <a href="#">View Profile →</a>
+    </div>
+</div>
+
+<section class="section" id="previous-cases" style="margin-top:28px">
+    <h2 class="section-heading">My Previous Cases</h2>
+    <p class="section-subtitle">Your submitted assessments and doctor's feedback.</p>
+
+    {% if cases %}
+        {% for case in cases %}
+        <div class="case-card">
+
+            <div class="case-top">
+                <h3>Assessment #{{ case.id }}</h3>
+
+                <span class="status
+                    {% if case.status == 'Reviewed' %}reviewed
+                    {% elif case.status == 'Under Review' %}under-review
+                    {% endif %}">
+                    {{ case.status }}
+                </span>
+            </div>
+
+            <div class="case-info">
+                <div>
+                    <small>Symptoms</small>
+                    <strong>{{ case.symptoms }}</strong>
+                </div>
+                <div>
+                    <small>Duration</small>
+                    <strong>{{ case.duration }}</strong>
+                </div>
+                <div>
+                    <small>Severity</small>
+                    <strong>{{ case.severity }}</strong>
+                </div>
+            </div>
+
+            {% if case.red_flag_level == 'Needs Review' %}
+            <div class="alert">
+                <strong>Safety Alert: Needs Review</strong><br>
+                {{ case.red_flag_details }}
+            </div>
+            {% else %}
+            <div class="normal">
+                {{ case.red_flag_details }}
+            </div>
+            {% endif %}
+
+            <!-- SmartCare Assigned Doctor -->
+            {% if case.doctor_name %}
+            <div class="doctor-box">
+                <h4>🩺 SmartCare – Your Assigned Doctor</h4>
+
+                <div class="doctor-details">
+                    <strong>Dr. {{ case.doctor_name }}</strong>
+                    <span>Specialization: {{ case.doctor_specialization }}</span>
+                    <span>Qualification: {{ case.doctor_qualification }}</span>
+                    <span>Hospital/Clinic: {{ case.doctor_hospital or 'Not provided' }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="unassigned">
+                <strong>SmartCare: Doctor Not Assigned Yet</strong>
+                No matching doctor is currently registered for this assessment.
+                General review is recommended. Please contact the healthcare team.
+            </div>
+            {% endif %}
+
+            <div class="doctor-notes">
+                <strong>Doctor's Review / Notes</strong>
+                <p style="margin-top:7px">
+                    {% if case.doctor_notes %}
+                        {{ case.doctor_notes }}
+                    {% else %}
+                        Your case is awaiting doctor's review.
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="upload-box">
+                <h4>📎 Upload Medical Reports</h4>
+                <p>Attach reports related to this assessment. Accepted formats: PDF, JPG, JPEG and PNG. Maximum size: 10 MB per file.</p>
+
+                <form action="{{ url_for('upload_report', case_id=case.id) }}"
+                      method="POST" enctype="multipart/form-data">
+                    <input type="file" name="report"
+                           accept=".pdf,.jpg,.jpeg,.png"
+                           required>
+                    <button type="submit" class="upload-btn">Upload Report</button>
+                </form>
+            </div>
+
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty">
+            <h3>No assessments submitted yet</h3>
+            <p>Complete a health assessment first. You can then attach reports to it.</p>
+        </div>
+    {% endif %}
+</section>
+
+</div>
+
+<footer>MediKiosk | AI-Powered Patient Case-Taking Software</footer>
+</body>
+</html>

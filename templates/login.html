@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediKiosk Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f5f3, #f4f7fb);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            width: 100%;
+            max-width: 430px;
+            padding: 38px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(20, 60, 70, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            color: #123b46;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #71818a;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            color: #29434b;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d5e1e3;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #168c83;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #087f78;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #066b65;
+        }
+
+        .error {
+            background: #fff0ef;
+            color: #b42318;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #65777e;
+        }
+
+        a {
+            color: #087f78;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <h1>Welcome Back!</h1>
+
+        <p class="subtitle">
+            {{ system }} · {{ role|title }} Login
+        </p>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST">
+
+            <label>Email Address</label>
+            <input type="email"
+                   name="email"
+                   placeholder="Enter your registered email"
+                   required>
+
+            <label>Password</label>
+            <input type="password"
+                   name="password"
+                   placeholder="Enter your password"
+                   required>
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <div class="links">
+            Don't have an account?
+            <a href="{{ url_for('register',
+                system='modern' if system == 'Modern Medicine' else 'ayurveda',
+                role=role) }}">Register here</a>
+
+            <br><br>
+
+            <a href="{{ url_for('home') }}">Back to Home</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
