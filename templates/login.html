@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MEDIKIOSK | {{ system }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="login-page">
+
+    <header class="login-header">
+        <h1>MEDIKIOSK<span>.</span></h1>
+        <a href="/">Home</a>
+    </header>
+
+    <main class="login-main">
+
+        <div class="welcome-text">
+            <p class="tagline">YOUR HEALTH, OUR PRIORITY</p>
+            <h2>Welcome to <span>{{ system }}</span></h2>
+            <p>Choose how you would like to continue with MEDIKIOSK.</p>
+        </div>
+
+        <div class="login-container">
+
+            <div class="login-card patient-card">
+                <div class="login-icon">🩺</div>
+                <p class="card-label">FOR PATIENTS</p>
+                <h3>Patient Portal</h3>
+                <p>Share your symptoms, provide health details and manage your medical case.</p>
+                <button onclick="location.href='{{ '/modern/patient' if system == 'Modern Medicine' else '/ayurveda/patient' }}'">
+    Patient Login
+</button>
+            </div>
+
+            <div class="login-card doctor-card">
+                <div class="login-icon">👨‍⚕️</div>
+                <p class="card-label">FOR DOCTORS</p>
+                <h3>Doctor Portal</h3>
+                <p>Access patient case details and review their submitted health information.</p>
+                <button onclick="location.href='{{ '/modern/doctor' if system == 'Modern Medicine' else '/ayurveda/doctor' }}'">
+    Doctor Login
+</button>
+            </div>
+
+        </div>
+
+        <p class="secure-note">🔒 Secure healthcare access | MEDIKIOSK 2026</p>
+
+    </main>
+
+</body>
+</html>
+

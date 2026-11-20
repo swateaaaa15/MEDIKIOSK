@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Case History | MediKiosk</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #263445;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #176b87;
+        }
+
+        header a {
+            text-decoration: none;
+            color: #176b87;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1000px;
+            margin: 35px auto;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #718096;
+            margin-bottom: 25px;
+        }
+
+        .case-card {
+            background: white;
+            padding: 25px;
+            border-radius: 13px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid #e8edf2;
+            padding-bottom: 15px;
+            margin-bottom: 18px;
+        }
+
+        .status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .Pending {
+            background: #fff2d5;
+            color: #9a6700;
+        }
+
+        .Reviewed {
+            background: #e0efff;
+            color: #1764a0;
+        }
+
+        .Completed {
+            background: #ddf6e7;
+            color: #187345;
+        }
+
+        .section-title {
+            color: #176b87;
+            margin: 22px 0 13px;
+            font-size: 18px;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .info-item {
+            background: #f7f9fc;
+            padding: 14px;
+            border-radius: 8px;
+        }
+
+        .info-item strong {
+            display: block;
+            color: #526477;
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .info-item p {
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .doctor-box {
+            background: #eaf5f8;
+            border-left: 4px solid #176b87;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .doctor-box h3 {
+            color: #176b87;
+            margin-bottom: 12px;
+        }
+
+        .doctor-box p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .unassigned {
+            background: #fff6e5;
+            border-left: 4px solid #d69b27;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+
+        .red-flag {
+            background: #fff0ef;
+            color: #a83232;
+            padding: 14px;
+            border-radius: 8px;
+            margin: 18px 0;
+            line-height: 1.5;
+        }
+
+        .doctor-notes {
+            background: #edf6fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 18px;
+        }
+
+        .doctor-notes h3 {
+            color: #176b87;
+            margin-bottom: 8px;
+        }
+
+        .doctor-notes p {
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            background: white;
+            text-align: center;
+            padding: 45px 20px;
+            border-radius: 12px;
+            color: #718096;
+        }
+
+        @media(max-width: 650px) {
+            .container {
+                width: 92%;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            .case-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MediKiosk</div>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</header>
+
+<div class="container">
+
+    <h1>My Case History</h1>
+
+    <p class="subtitle">
+        View your submitted health assessments and doctor updates.
+        Portal: {{ system }}
+    </p>
+
+    {% if cases %}
+
+        {% for case in cases %}
+
+            <div class="case-card">
+
+                <div class="case-header">
+                    <div>
+                        <h2>Case #{{ case['id'] }}</h2>
+                        <p style="color:#718096; margin-top:6px;">
+                            Submitted: {{ case['created_at'] }}
+                        </p>
+                    </div>
+
+                    <span class="status {{ case['status'] }}">
+                        {{ case['status'] }}
+                    </span>
+                </div>
+
+                <h3 class="section-title">Assigned Doctor</h3>
+
+                {% if case['assigned_doctor_name'] %}
+
+                    <div class="doctor-box">
+                        <h3>Doctor Details</h3>
+
+                        <p>
+                            <strong>Doctor Name:</strong>
+                            Dr. {{ case['assigned_doctor_name'] }}
+                        </p>
+
+                        <p>
+                            <strong>Specialization:</strong>
+                            {{ case['assigned_doctor_specialization'] or 'Not specified' }}
+                        </p>
+
+                        <p>
+                            <strong>Department:</strong>
+                            {{ case['department'] }}
+                        </p>
+                    </div>
+
+                {% else %}
+
+                    <div class="unassigned">
+                        <strong>Doctor Not Assigned Yet</strong>
+                        <p>
+                            Your case is currently waiting for assignment
+                            to a matching specialist.
+                        </p>
+                    </div>
+
+                {% endif %}
+
+                <h3 class="section-title">Clinical Summary</h3>
+
+                <div class="info">
+
+                    <div class="info-item">
+                        <strong>Symptoms</strong>
+                        <p>{{ case['symptoms'] }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Duration</strong>
+                        <p>{{ case['duration'] }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Severity</strong>
+                        <p>{{ case['severity'] }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Medical History</strong>
+                        <p>{{ case['medical_history'] or 'Not provided' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Current Medications</strong>
+                        <p>{{ case['current_medications'] or 'Not provided' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Allergies</strong>
+                        <p>{{ case['allergies'] or 'Not provided' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Additional Notes</strong>
+                        <p>{{ case['additional_notes'] or 'Not provided' }}</p>
+                    </div>
+
+                </div>
+
+                {% if case['red_flag_level'] != 'Normal' %}
+                    <div class="red-flag">
+                        <strong>⚠ {{ case['red_flag_level'] }} Alert</strong>
+                        <p>{{ case['red_flag_details'] }}</p>
+                    </div>
+                {% endif %}
+
+                <div class="doctor-notes">
+                    <h3>Doctor's Notes</h3>
+
+                    {% if case['doctor_notes'] %}
+                        <p>{{ case['doctor_notes'] }}</p>
+                    {% else %}
+                        <p>Your doctor has not added any notes yet.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-state">
+            <h2>No Case History Yet</h2>
+            <p>Your submitted health assessments will appear here.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
+

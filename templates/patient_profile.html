@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Profile - MediKiosk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>My Profile</h1>
+    <p>Patient Personal Details</p>
+
+    <div class="card">
+        <h2>Basic Information</h2>
+
+        <p><strong>Name:</strong> {{ patient['name'] }}</p>
+        <p><strong>Age:</strong> {{ patient['age'] }}</p>
+        <p><strong>Gender:</strong> {{ patient['gender'] }}</p>
+        <p><strong>Email:</strong> {{ patient['email'] }}</p>
+        <p><strong>Mobile:</strong> {{ patient['mobile'] }}</p>
+        <p><strong>Portal:</strong> {{ patient['system'] }}</p>
+        <p><strong>Role:</strong> {{ patient['role'] }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Health Records</h2>
+        <p><strong>Total Submitted Cases:</strong> {{ total_cases }}</p>
+    </div>
+
+    <br>
+
+    <a href="{{ url_for('patient_history') }}" class="btn">
+        View Case History
+    </a>
+
+    <a href="{{ url_for('dashboard') }}" class="btn">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

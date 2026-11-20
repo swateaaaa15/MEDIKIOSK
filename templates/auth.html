@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ role }} Login | MEDIKIOSK</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="login-page">
+
+    <header class="login-header">
+        <h1>MEDIKIOSK<span>.</span></h1>
+        <a href="/">Home</a>
+    </header>
+
+    <main class="auth-main">
+
+        <div class="auth-card">
+
+            <div class="auth-icon">🔐</div>
+
+            <p class="tagline">{{ system }} PORTAL</p>
+
+            <h2>{{ role }} Login</h2>
+
+            <p class="auth-description">
+                Welcome back! Please enter your details to continue.
+            </p>
+
+            {% if error %}
+            <p style="color:#d93025; background:#fff0ef; padding:12px; border-radius:8px;">
+                {{ error }}
+            </p>
+            {% endif %}
+
+            <form method="POST">
+
+                <label>Email Address</label>
+                <input type="email" name="email"
+                placeholder="Enter your email" required>
+
+                <label>Password</label>
+                <input type="password" name="password"
+                placeholder="Enter your password" required>
+
+                <button type="submit" class="auth-button">
+                    Login →
+                </button>
+
+            </form>
+
+            <p class="register-link">
+                Don't have an account?
+                <a href="/{{ 'modern' if system == 'Modern Medicine' else 'ayurveda' }}/{{ role.lower() }}/register">
+                    Create Account
+                </a>
+            </p>
+
+            <p class="auth-back">
+                <a href="/{{ 'modern' if system == 'Modern Medicine' else 'ayurveda' }}">
+                    ← Back to Portal
+                </a>
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
+

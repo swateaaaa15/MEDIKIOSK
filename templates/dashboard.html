@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | MEDIKIOSK</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fa;
+            color: #243247;
+        }
+
+        .navbar {
+            background: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px #0000000d;
+        }
+
+        .logo { font-size: 25px; font-weight: bold; color: #176b87; }
+        .logo span { color: #65b88a; }
+
+        .logout {
+            text-decoration: none;
+            background: #176b87;
+            color: white;
+            padding: 11px 22px;
+            border-radius: 7px;
+        }
+
+        .dashboard {
+            max-width: 1100px;
+            margin: 55px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            background: linear-gradient(120deg, #176b87, #399e9b);
+            color: white;
+            padding: 42px;
+            border-radius: 16px;
+        }
+
+        .welcome h1 { font-size: 32px; }
+        .section-title { margin-top: 40px; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+            margin-top: 22px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 13px;
+            box-shadow: 0 4px 18px #00000009;
+            transition: 0.3s;
+            height: 100%;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .emoji { font-size: 32px; }
+
+        .card p {
+            color: #68778a;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .card strong { color: #176b87; }
+
+        .count {
+            font-size: 30px;
+            font-weight: bold;
+            color: #176b87;
+            margin-top: 12px;
+        }
+
+        .system-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            line-height: 1.8;
+        }
+
+        /* PATIENT JOURNEY TRACKER */
+        .journey-box {
+            background: white;
+            margin-top: 30px;
+            padding: 28px;
+            border-radius: 15px;
+            box-shadow: 0 4px 18px #00000009;
+        }
+
+        .journey-box h2 {
+            margin-top: 0;
+            color: #243247;
+        }
+
+        .journey-track {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-top: 35px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+        }
+
+        .journey-step {
+            flex: 1;
+            min-width: 105px;
+            text-align: center;
+            position: relative;
+        }
+
+        .journey-step:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            height: 4px;
+            width: 100%;
+            background: #dce3e9;
+            top: 17px;
+            left: 50%;
+            z-index: 0;
+        }
+
+        .journey-step.completed:not(:last-child)::after {
+            background: #20a464;
+        }
+
+        .step-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #dce3e9;
+            color: #68778a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+        }
+
+        .journey-step.completed .step-circle {
+            background: #20a464;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 13px;
+            color: #68778a;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .journey-step.completed .step-label {
+            color: #16834e;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #84909e;
+        }
+
+        @media(max-width: 600px) {
+            .welcome { padding: 25px; }
+            .welcome h1 { font-size: 25px; }
+            .navbar { padding: 18px 5%; }
+            .journey-box { padding: 18px; }
+            .journey-track { justify-content: flex-start; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">MEDIKIOSK<span>.</span></div>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</nav>
+
+<main class="dashboard">
+
+    <section class="welcome">
+        <p>WELCOME TO YOUR DASHBOARD</p>
+        <h1>Hello, {{ name }}! 👋</h1>
+        <p>You are logged in as a {{ role }} in the {{ system }} system.</p>
+        <p>Your healthcare journey starts here.</p>
+    </section>
+
+    {% if role == 'Patient' %}
+
+    <section class="journey-box">
+        <h2>📍 Your Patient Journey</h2>
+        <p>Track the progress of your healthcare process.</p>
+
+        <div class="journey-track">
+
+            <div class="journey-step completed">
+                <div class="step-circle">✓</div>
+                <div class="step-label">Patient<br>Registration</div>
+            </div>
+
+            <div class="journey-step {% if journey_interview %}completed{% endif %}">
+                <div class="step-circle">
+                    {% if journey_interview %}✓{% else %}2{% endif %}
+                </div>
+                <div class="step-label">Patient<br>Interview</div>
+            </div>
+
+            <div class="journey-step {% if journey_red_flag %}completed{% endif %}">
+                <div class="step-circle">
+                    {% if journey_red_flag %}✓{% else %}3{% endif %}
+                </div>
+                <div class="step-label">Red Flag<br>Detection</div>
+            </div>
+
+            <div class="journey-step {% if journey_summary %}completed{% endif %}">
+                <div class="step-circle">
+                    {% if journey_summary %}✓{% else %}4{% endif %}
+                </div>
+                <div class="step-label">Clinical<br>Summary</div>
+            </div>
+
+            <div class="journey-step {% if journey_doctor %}completed{% endif %}">
+                <div class="step-circle">
+                    {% if journey_doctor %}✓{% else %}5{% endif %}
+                </div>
+                <div class="step-label">Doctor<br>Assignment</div>
+            </div>
+
+        </div>
+    </section>
+
+    {% endif %}
+
+    <h2 class="section-title">
+        {% if role == 'Patient' %}
+            Your Health Space
+        {% else %}
+            Doctor's Workspace
+        {% endif %}
+    </h2>
+
+    <div class="cards">
+
+        {% if role == 'Patient' %}
+
+        <a href="{{ url_for('patient_profile') }}" class="card-link">
+            <div class="card">
+                <div class="emoji">👤</div>
+                <h3>My Profile</h3>
+                <p>View your personal information and account details.</p>
+                <strong>View Profile →</strong>
+            </div>
+        </a>
+
+        <a href="{{ url_for('interview') }}" class="card-link">
+            <div class="card">
+                <div class="emoji">🤖</div>
+                <h3>Guided Patient Interview</h3>
+                <p>Answer simple questions about your symptoms.</p>
+                <strong>Start Interview →</strong>
+            </div>
+        </a>
+
+        <a href="{{ url_for('assessment') }}" class="card-link">
+            <div class="card">
+                <div class="emoji">🩺</div>
+                <h3>Health Assessment</h3>
+                <p>Fill in your symptoms and other health details.</p>
+                <strong>Start Assessment →</strong>
+            </div>
+        </a>
+
+        <a href="{{ url_for('patient_history') }}" class="card-link">
+            <div class="card">
+                <div class="emoji">📋</div>
+                <h3>My Case History</h3>
+                <p>View your submitted assessments, assigned doctor and case status.</p>
+                <strong>View My History →</strong>
+            </div>
+        </a>
+
+        <div class="card">
+            <div class="emoji">📊</div>
+            <h3>Total Cases</h3>
+            <div class="count">{{ total_cases }}</div>
+            <p>Total health assessments submitted by you.</p>
+        </div>
+
+        {% else %}
+
+        <a href="{{ url_for('doctor_profile') }}" class="card-link">
+            <div class="card">
+                <div class="emoji">👨‍⚕️</div>
+                <h3>My Profile</h3>
+                <p>View your personal and professional details.</p>
+                <strong>View Profile →</strong>
+            </div>
+        </a>
+
+        <a href="{{ url_for('doctor_cases') }}" class="card-link">
+            <div class="card">
+                <div class="emoji">👥</div>
+                <h3>Patient Records</h3>
+                <p>View your assigned patients and their assessments.</p>
+                <strong>View Records →</strong>
+            </div>
+        </a>
+
+        <div class="card">
+            <div class="emoji">📊</div>
+            <h3>Total Cases</h3>
+            <div class="count">{{ total_cases }}</div>
+            <p>Total patients assigned to you.</p>
+        </div>
+
+        <div class="card">
+            <div class="emoji">⏳</div>
+            <h3>Pending Cases</h3>
+            <div class="count">{{ pending_cases }}</div>
+            <p>Cases waiting for your review.</p>
+        </div>
+
+        <div class="card">
+            <div class="emoji">✅</div>
+            <h3>Completed Cases</h3>
+            <div class="count">{{ completed_cases }}</div>
+            <p>Cases marked as completed.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <div class="system-info">
+        <strong>Healthcare System:</strong> {{ system }}<br>
+        <strong>Account Type:</strong> {{ role }}
+    </div>
+
+</main>
+
+<footer>
+    MEDIKIOSK © 2026 | Smarter Care. Better Tomorrow.
+</footer>
+
+</body>
+</html>

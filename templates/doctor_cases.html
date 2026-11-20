@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Records | MediKiosk</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #263445;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #176b87;
+        }
+
+        header a {
+            text-decoration: none;
+            color: #176b87;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #718096;
+        }
+
+        .flash-message {
+            background: #e0f7e9;
+            color: #176b45;
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .case-card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid #e8edf2;
+            padding-bottom: 17px;
+            margin-bottom: 20px;
+        }
+
+        .case-header h2 {
+            font-size: 20px;
+        }
+
+        .status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .Pending {
+            background: #fff2d5;
+            color: #9a6700;
+        }
+
+        .Reviewed {
+            background: #e0efff;
+            color: #1764a0;
+        }
+
+        .Completed {
+            background: #ddf6e7;
+            color: #187345;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 20px 0 14px;
+            color: #176b87;
+        }
+
+        .routing-box {
+            background: #edf7fa;
+            border-left: 4px solid #176b87;
+            padding: 15px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .routing-box h3 {
+            color: #176b87;
+            margin-bottom: 10px;
+        }
+
+        .routing-box p {
+            line-height: 1.6;
+            color: #405466;
+        }
+
+        .red-flag {
+            background: #fff0ef;
+            border-left: 4px solid #e34b4b;
+            padding: 15px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .red-flag h3 {
+            color: #c53030;
+            margin-bottom: 7px;
+        }
+
+        .red-flag p {
+            color: #7b3333;
+            line-height: 1.5;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .summary-item {
+            background: #f7f9fc;
+            padding: 14px;
+            border-radius: 8px;
+        }
+
+        .summary-item strong {
+            display: block;
+            margin-bottom: 7px;
+            color: #526477;
+            font-size: 14px;
+        }
+
+        .summary-item p {
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .note {
+            color: #718096;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        .doctor-actions {
+            border-top: 1px solid #e8edf2;
+            margin-top: 25px;
+            padding-top: 20px;
+        }
+
+        .doctor-actions label {
+            display: block;
+            font-weight: bold;
+            margin: 14px 0 8px;
+        }
+
+        .doctor-actions select,
+        .doctor-actions textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d5dee8;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .doctor-actions textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            margin-top: 15px;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            background: #176b87;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #10536b;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 45px 20px;
+            text-align: center;
+            border-radius: 12px;
+            color: #718096;
+        }
+
+        @media(max-width: 650px) {
+            .container {
+                width: 92%;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .case-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MediKiosk</div>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</header>
+
+<div class="container">
+
+    <div class="page-heading">
+        <h1>Patient Records</h1>
+        <p>Review assigned patient information and manage submitted cases.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if cases %}
+
+        {% for case in cases %}
+
+            <div class="case-card">
+
+                <div class="case-header">
+                    <div>
+                        <h2>Patient: {{ case['patient_name'] }}</h2>
+                        <p style="color:#718096; margin-top:6px;">
+                            Case ID: {{ case['id'] }}
+                        </p>
+                    </div>
+
+                    <span class="status {{ case['status'] }}">
+                        {{ case['status'] }}
+                    </span>
+                </div>
+
+                <!-- SMARTCARE ROUTING -->
+                <div class="routing-box">
+                    <h3>SmartCare Routing</h3>
+
+                    <p>
+                        <strong>Assigned Department:</strong>
+                        {{ case['department'] or 'General Medicine' }}
+                    </p>
+
+                    <p>
+                        <strong>Assigned Doctor:</strong>
+                        {{ session['name'] if case['assigned_doctor_id'] == session['user_id'] else 'Unassigned' }}
+                    </p>
+                </div>
+
+                {% if case['red_flag_level'] != 'Normal' %}
+                    <div class="red-flag">
+                        <h3>⚠ Red Flag Alert: {{ case['red_flag_level'] }}</h3>
+                        <p>{{ case['red_flag_details'] }}</p>
+                    </div>
+                {% endif %}
+
+                <h3 class="section-title">Clinical Summary</h3>
+
+                <div class="summary-grid">
+
+                    <div class="summary-item">
+                        <strong>Patient Age</strong>
+                        <p>{{ case['patient_age'] }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Patient Gender</strong>
+                        <p>{{ case['patient_gender'] }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Chief Complaints</strong>
+                        <p>{{ case['symptoms'] }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>History of Present Illness</strong>
+                        <p>{{ case['additional_notes'] or 'Not provided' }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Symptom Duration</strong>
+                        <p>{{ case['duration'] }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Severity Level</strong>
+                        <p>{{ case['severity'] }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Medical History</strong>
+                        <p>{{ case['medical_history'] or 'Not provided' }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Current Medications</strong>
+                        <p>{{ case['current_medications'] or 'Not provided' }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Known Allergies</strong>
+                        <p>{{ case['allergies'] or 'Not provided' }}</p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>Assessment Submitted On</strong>
+                        <p>{{ case['created_at'] }}</p>
+                    </div>
+
+                </div>
+
+                <p class="note">
+                    This summary organises information submitted by the patient.
+                    It does not provide an automatic diagnosis.
+                </p>
+
+                <div class="doctor-actions">
+
+                    <h3 class="section-title">Doctor Actions</h3>
+
+                    <form method="POST"
+                          action="{{ url_for('update_doctor_case', case_id=case['id']) }}">
+
+                        <label for="status-{{ case['id'] }}">
+                            Update Case Status
+                        </label>
+
+                        <select name="status" id="status-{{ case['id'] }}" required>
+
+                            <option value="Pending"
+                                {% if case['status'] == 'Pending' %}selected{% endif %}>
+                                Pending
+                            </option>
+
+                            <option value="Reviewed"
+                                {% if case['status'] == 'Reviewed' %}selected{% endif %}>
+                                Reviewed
+                            </option>
+
+                            <option value="Completed"
+                                {% if case['status'] == 'Completed' %}selected{% endif %}>
+                                Completed
+                            </option>
+
+                        </select>
+
+                        <label for="notes-{{ case['id'] }}">
+                            Doctor's Notes
+                        </label>
+
+                        <textarea
+                            name="doctor_notes"
+                            id="notes-{{ case['id'] }}"
+                            placeholder="Write your observations or notes here...">{{ case['doctor_notes'] or '' }}</textarea>
+
+                        <button type="submit" class="save-btn">
+                            Save Changes
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-state">
+            <h2>No Patient Records Found</h2>
+            <p>Assigned patient cases will appear here after submission.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
+
+
+
+

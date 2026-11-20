@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | MEDIKIOSK</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="register-page {{ 'modern-theme' if system == 'Modern Medicine' else 'ayurveda-theme' }}">
+
+    <div class="register-wrapper">
+
+        <!-- LEFT SIDE -->
+        <section class="register-visual">
+
+            <a href="/" class="register-logo">
+                MEDIKIOSK<span>.</span>
+            </a>
+
+            <div class="visual-content">
+
+                <p class="visual-tag">YOUR HEALTH, YOUR JOURNEY</p>
+
+                <h1>A healthier tomorrow starts with you.</h1>
+
+                <p>
+                    Create your account and experience
+                    a smarter, simpler and more connected
+                    healthcare journey.
+                </p>
+
+                <div class="visual-points">
+                    <p>✓ Personalised healthcare access</p>
+                    <p>✓ Secure patient information</p>
+                    <p>✓ Easy connection with doctors</p>
+                </div>
+
+            </div>
+
+            <p class="visual-footer">
+                Smarter Care. Better Tomorrow.
+            </p>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <section class="register-form-section">
+
+            <div class="register-card">
+
+                <a href="/" class="mobile-logo">
+                    MEDIKIOSK<span>.</span>
+                </a>
+
+                <p class="register-eyebrow">
+                    {{ system }} · {{ role }} PORTAL
+                </p>
+
+                <h2>Create your account</h2>
+
+                <p class="register-subtitle">
+                    Fill in your details to get started.
+                </p>
+
+                {% if error %}
+                <p style="color: #d93025; background: #fff0ef; padding: 12px; border-radius: 8px;">
+                    {{ error }}
+                </p>
+                {% endif %}
+
+                <form method="POST" action="/{{ 'modern' if system == 'Modern Medicine' else 'ayurveda' }}/{{ role.lower() }}/register">
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name"
+                            placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" name="age"
+                            placeholder="Your age" min="1" max="120" required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email"
+                        placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" name="mobile"
+                        placeholder="Enter mobile number"
+                        pattern="[0-9]{10}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender</label>
+
+                        <select name="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                            <option value="Other">Other</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    {% if role.lower() == 'doctor' %}
+
+                    <div class="form-group">
+                        <label>Medical Specialization</label>
+
+                        <select name="specialization" required>
+                            <option value="">Select your specialization</option>
+
+                            {% if system == 'Modern Medicine' %}
+                                <option value="Cardiologist">Cardiologist</option>
+                                <option value="Pulmonologist">Pulmonologist</option>
+                                <option value="General Physician">General Physician</option>
+                            {% else %}
+                                <option value="Ayurvedic General Physician">Ayurvedic General Physician</option>
+                                <option value="Kayachikitsa Specialist">Kayachikitsa Specialist</option>
+                                <option value="Panchakarma Specialist">Panchakarma Specialist</option>
+                            {% endif %}
+
+                        </select>
+                    </div>
+
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label>Create Password</label>
+                        <input type="password" name="password"
+                        placeholder="Create a password"
+                        minlength="6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm_password"
+                        placeholder="Re-enter your password"
+                        minlength="6" required>
+                    </div>
+
+                    <button type="submit" class="register-submit">
+                        Create Account →
+                    </button>
+
+                </form>
+
+                <p class="register-login">
+                    Already have an account?
+                    <a href="/{{ 'modern' if system == 'Modern Medicine' else 'ayurveda' }}/{{ role.lower() }}">
+                        Login here
+                    </a>
+                </p>
+
+                <p class="register-security">
+                    🔒 Your information stays protected.
+                </p>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+</html>
+
+
